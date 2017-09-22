@@ -1,0 +1,8 @@
+{% if form.your_name.value %}
+こんにちは {{ form.your_name.value }} さん
+{% endif %}
+<form action="/SignupForm/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
