@@ -1,4 +1,4 @@
-{% if form.your_name.value %}
+{% if not form.errors %}
 こんにちは {{ form.your_name.value }} さん
 {% endif %}
 <form action="/SignupForm/" method="post">
