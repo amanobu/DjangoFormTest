@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'localflavor',
+    'bootstrapform',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +126,7 @@ STATIC_URL = '/static/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 ALLOWED_HOSTS = ["*"]
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
