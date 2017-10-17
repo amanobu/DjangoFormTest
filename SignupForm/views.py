@@ -4,22 +4,14 @@ from django.http import HttpResponseRedirect
 
 from .forms import NameForm,SignupForm
 
-def get_name(request):
-    if request.method == 'POST':
-        form = NameForm(request.POST)
-        if form.is_valid():
-            pass
-    else:
-        form = NameForm()
-
-    return render(request, 'SignupForm/name.html', {'form': form})
-
 def entry(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            pass
+            #もしValidationで値を変換したらなばform情報を再構成する必要があるのでたぶんＯＫのはず
+            form = SignupForm(initial=form.cleaned_data)
     else:
+        #POSTでないならば空のFormを作成する
         form = SignupForm()
 
     return render(request, 'SignupForm/entry.html', {'form': form})

@@ -4,25 +4,15 @@ from django.forms import CharField
 from .models import Entry
 from .validator import *
 import re
+from .util import numZEN2HAN
 #国際化に向けてこのようにした方が良いらしい
 from django.utils.translation import gettext as _
-
-class NameForm(forms.Form):
-    your_name = forms.CharField(label = 'お名前は？' ,max_length=100)
-
-    def clean(self):
-        #cleand_dataには入力チェックが通った物が入っている
-        name = self.cleaned_data['your_name']
-        if name.find('テスト') == -1:
-            raise forms.ValidationError("入力エラー。「テスト」って入ってないよ")
-        else:
-            return name
 
 class SignupForm(forms.ModelForm):
     class Meta:
         #モデルの指定
         model = Entry
-        #すべての項目を使うので'__all__'
+        #すべての項目を使うので'__all__'で良いのだが、あまりやらない方が良いらしいとDjangoチュートリアルに記載されていた
         fields = '__all__'
         #ラベルの定義
         labels = {
@@ -36,9 +26,6 @@ class SignupForm(forms.ModelForm):
             'address3':'住所3',
             'email':'メールアドレス'
             }
-    zip1 = CharField(validators=[validate_zip1])
-    zip2 = CharField(validators=[validate_zip2])
-
     
     #強制的にclass="form-control"をくっつける
     def __init__(self, *args, **kwargs):
@@ -46,11 +33,29 @@ class SignupForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
 
+    #各フィールドの個別チェック
+    def clean_zip1(self):
+        zip1 = self.cleaned_data.get('zip1')
+        if zip1 and not validate_zip1(zip1):
+            raise forms.ValidationError(_('正しく入力してよ'))
+        else:
+            tmp_zip1 = numZEN2HAN(zip1)
+            self.cleaned_data['zip1'] = tmp_zip1
+        #値を変換したらclean_dataに反映する為新しい値をreturnする必要がある
+        return tmp_zip1
+
+    def clean_zip2(self):
+        zip2 = self.cleaned_data.get('zip2')
+        if zip2 and not validate_zip2(zip2):
+            raise forms.ValidationError(_('正しく入力してよ'))
+        tmp_zip2 = numZEN2HAN(zip2)
+        self.cleaned_data['zip2'] = tmp_zip2
+        return tmp_zip2
+
     #独自バリデーション:モデルの検証
     def clean(self):
+        print(self.cleaned_data)
         name = self.cleaned_data['fname'] + self.cleaned_data['lname']
         if len(name) > 8:
             raise forms.ValidationError({'lname': _(u'姓名あわせて８文字以上だよ'),'fname': _(u'姓名あわせて８文字以上だよ')})
-
-        
 
