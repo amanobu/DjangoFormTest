@@ -4,6 +4,7 @@ from localflavor.jp.forms import JP_PREFECTURES
 from django.core.validators import MinLengthValidator
 
 class Entry(models.Model):
+    userid = models.CharField(max_length=255)
     fname = models.CharField(max_length=255)
     lname = models.CharField(max_length=255)
     #住所には固定長のためMinLengthValidatorを設定する

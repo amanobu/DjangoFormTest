@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
-from .forms import NameForm,SignupForm
+from .forms import SignupForm
 
 def entry(request):
     if request.method == 'POST':

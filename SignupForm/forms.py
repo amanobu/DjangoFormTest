@@ -16,6 +16,7 @@ class SignupForm(forms.ModelForm):
         fields = '__all__'
         #ラベルの定義
         labels = {
+            'userid':'ご希望のUSER ID',
             'fname':'姓',
             'lname':'名',
             'zip1':'郵便番号1',
@@ -39,6 +40,7 @@ class SignupForm(forms.ModelForm):
         if zip1 and not validate_zip1(zip1):
             raise forms.ValidationError(_('正しく入力してよ'))
         else:
+            #値の変換
             tmp_zip1 = numZEN2HAN(zip1)
             self.cleaned_data['zip1'] = tmp_zip1
         #値を変換したらclean_dataに反映する為新しい値をreturnする必要がある
@@ -48,14 +50,14 @@ class SignupForm(forms.ModelForm):
         zip2 = self.cleaned_data.get('zip2')
         if zip2 and not validate_zip2(zip2):
             raise forms.ValidationError(_('正しく入力してよ'))
-        tmp_zip2 = numZEN2HAN(zip2)
-        self.cleaned_data['zip2'] = tmp_zip2
+        else:
+            tmp_zip2 = numZEN2HAN(zip2)
+            self.cleaned_data['zip2'] = tmp_zip2
         return tmp_zip2
 
     #独自バリデーション:モデルの検証
     def clean(self):
-        print(self.cleaned_data)
-        name = self.cleaned_data['fname'] + self.cleaned_data['lname']
-        if len(name) > 8:
-            raise forms.ValidationError({'lname': _(u'姓名あわせて８文字以上だよ'),'fname': _(u'姓名あわせて８文字以上だよ')})
+        #姓名合わせて～文字の検証
+         if not validate_name(self.cleaned_data.get('fname'), self.cleaned_data.get('lname')):
+            raise forms.ValidationError({'lname': _(u'姓名あわせて2文字以上、８文字以下だよ'),'fname': _(u'姓名あわせて2文字以上、８文字以下だよ')})
 

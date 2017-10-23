@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 import re
@@ -28,4 +29,17 @@ def validate_zip2(value):
             return True
     print("zip2 NG")
     return False
-    
+
+def validate_name(fname,lname):
+    if fname and lname:
+        name = fname + lname
+        name_length = len(name)
+        print(name)
+        print(name_length)
+        if 2 <= name_length and name_length <= 8:
+            return True
+    return False
+
+def validate_userid(userid):
+    #TODO:あとで文字列を制限するコードを記載
+    return True
