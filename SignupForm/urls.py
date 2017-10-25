@@ -4,5 +4,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.entry, name='index'),
+    url(r'^$', views.index, name='index'),    
+    url(r'^confirm', views.confirm, name='confirm'),    
+    url(r'^regist$', views.regist, name='regist'),
 ]

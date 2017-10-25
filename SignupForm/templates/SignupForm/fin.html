@@ -1,0 +1,10 @@
+{% extends "SignupForm/base.html" %}
+
+{% block contents %}
+<h1>Finish</h1>
+{% for field in form %}
+<div>
+  {{ field.label_tag }}{{ field.value }}
+</div>
+{% endfor %}
+{% endblock %}

@@ -14,6 +14,6 @@ class Entry(models.Model):
     prefecture = models.CharField(choices=JP_PREFECTURES,max_length=255)
     address1 = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255)
-    address3 = models.CharField(max_length=255)
+    address3 = models.CharField(max_length=255,null=True,blank=True)
     email = models.EmailField()
 
